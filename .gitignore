@@ -31,9 +31,50 @@ Thumbs.db
 # Lock files
 package-lock.json
 yarn.lock
+.# Dependencies
+node_modules/
+dist/
+
+# Environment variables
+.env
+# Local env overrides (Next.js / Create React App / other)
+.env.local
+.env.*.local
+frontend/.env.local
+backend/.env.local
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test coverage
+coverage/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Next.js
+.next/
+
+# Lock files
+package-lock.json
+yarn.lock
 pnpm-lock.yaml
 
 # Logs
 logs/
 *.log
 npm-debug.log*
+
+# Ignore backup of nested .git we created when converting frontend to monorepo
+frontend/.git-backup/
+
+# Ignore frontend build & local files
+frontend/node_modules/
+frontend/.next/
+frontend/.env
