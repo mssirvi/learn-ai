@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { randomUUID } from 'crypto';
 import { GeminiService } from '../services/gemini.service';
-import { createChat, appendMessage, getLastNMessages, updateLastAssistantMessageAppend } from '../store/chatStore';
+import { chatStore } from '../store/chatStore';
 
 export class ChatController {
     private geminiService: GeminiService;
@@ -17,7 +17,7 @@ export class ChatController {
 
             // determine chatId
             const chatId = incomingChatId || randomUUID?.() || `${Date.now()}-${Math.floor(Math.random()*10000)}`;
-            createChat(chatId);
+            chatStore.createChat(chatId);
 
             if (!prompt) {
                 res.status(400).json({ error: 'Prompt is required' });
@@ -25,14 +25,13 @@ export class ChatController {
             }
 
             // append user message to store
-            appendMessage(chatId, { role: 'user', content: prompt, ts: Date.now() });
+            chatStore.appendMessage(chatId, { role: 'user', content: prompt, ts: Date.now() });
 
             // For debugging: log current stored messages for this chatId
             try {
                 // lazy require to avoid circular issues
                 // eslint-disable-next-line @typescript-eslint/no-var-requires
-                const { getMessages } = require('../store/chatStore');
-                const all = getMessages(chatId) as any[];
+                const all = chatStore.getMessages(chatId) as any[];
                 console.log('chat history for', chatId, all.map((m: any) => ({ role: m.role, contentPreview: m.content?.slice(0,120) })));
             } catch (e) {
                 // ignore
@@ -48,18 +47,18 @@ export class ChatController {
 
             try {
                 // prepare context: last N messages
-                const history = getLastNMessages(chatId, 10);
+                const history = chatStore.getLastNMessages(chatId, 10);
                 // build a simple combined prompt with roles
                 const combinedPrompt = history.map(m => `${m.role.toUpperCase()}: ${m.content}`).join('\n') + `\nASSISTANT:`;
 
                 // add an assistant placeholder so frontend shows loader
-                appendMessage(chatId, { role: 'assistant', content: '', ts: Date.now() });
+                chatStore.appendMessage(chatId, { role: 'assistant', content: '', ts: Date.now() });
                 console.log("prompt:", combinedPrompt);
                 await this.geminiService.generateStreamingText(combinedPrompt, (chunk) => {
                     // stream chunk to client
                     res.write(`data: ${JSON.stringify({ text: chunk })}\n\n`);
                     // update store by appending to last assistant message
-                    updateLastAssistantMessageAppend(chatId, chunk);
+                    chatStore.updateLastAssistantMessageAppend(chatId, chunk);
                 });
 
                 // done - include chatId so client can persist it
