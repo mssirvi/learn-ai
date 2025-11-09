@@ -1,9 +1,13 @@
-## learnAI — local dev scaffold for experimenting with Gemini
+## learnAI — personal monorepo for learning AI
 
-This repository is a small TypeScript/Node.js + Next.js workspace to experiment with Google's Gemini. It is organized into separate `backend/` and `frontend/` folders so you can iterate on API logic and UI independently.
+This repository is a personal monorepo used to learn and experiment with AI-related ideas and tooling. It contains small example projects and experiments (backend services, frontend demos, and language-model experiments) so you can iterate quickly and try out different approaches.
 
-- **backend**: Express + TypeScript service that calls Gemini and exposes a Server-Sent-Events (SSE) `/api/chat` endpoint.
-- **frontend**: Next.js (app router) + TypeScript UI that connects to the backend and streams responses.
+What you'll find here
+- Small backend experiments that call model APIs and expose simple endpoints.
+- Frontend examples (Next.js) that demonstrate streaming and chat-style UIs.
+- A few one-off utilities and agents for experimenting with prompt engineering and tool use.
+
+This repo is intentionally lightweight and exploratory — code is written for learning and experimentation rather than production readiness.
 
 ---
 
@@ -12,7 +16,7 @@ This repository is a small TypeScript/Node.js + Next.js workspace to experiment 
 1.  **Install dependencies:**
 
     ```bash
-    # from repository root
+    # from repository root, then enter the workspace you want to run
     cd backend
     npm install
 
@@ -22,19 +26,19 @@ This repository is a small TypeScript/Node.js + Next.js workspace to experiment 
 
 2.  **Create env files**
 
-    -   Backend: `backend/.env` (required)
+    -   Backend: `backend/.env` (if present)
 
         ```
         GEMINI_API_KEY=your_gemini_api_key_here
         ```
 
-    -   Frontend: `frontend/.env` (optional)
+    -   Frontend: `frontend/.env` (if present)
 
         ```
         NEXT_PUBLIC_API_URL=http://localhost:3001
         ```
 
-3.  **Start dev servers** (in separate terminals):
+3.  **Start a project** (each project has its own scripts; run from that folder):
 
     ```bash
     # backend
@@ -46,28 +50,13 @@ This repository is a small TypeScript/Node.js + Next.js workspace to experiment 
     npm run dev
     ```
 
-    The frontend runs at `http://localhost:3000` and the backend at `http://localhost:3001`.
+    Check each package's README or `package.json` scripts for details.
 
 ---
 
-### Project layout
+### Notes on use
 
-```
-.
-├─ backend/
-│  ├─ src/
-│  │  ├─ controllers/chat.controller.ts   # Express handler with SSE + chat logic
-│  │  ├─ services/gemini.service.ts      # Wrapper around @google/genai calls
-│  │  └─ store/chatStore.ts               # In-memory chat store
-├─ frontend/
-│  ├─ src/app/page.tsx                    # Main Next page (chat UI)
-│  ├─ src/hooks/useChat.ts                # Hook that orchestrates chat UI + service
-│  └─ src/services/chat.service.ts        # Client-side SSE reader
-```
+- This workspace is for learning: expect rapid iteration, commented experiments, and sometimes incomplete code.
+- If you add experiments, please keep them in clearly named folders and add a short README for how to run them.
 
 ---
-
-### Contributing
-
--   Add features under `frontend/src/components` for UI improvements.
--   For backend changes, keep controller logic small and place API wrapper code inside `services/`.

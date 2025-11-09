@@ -1,0 +1,35 @@
+{
+  "name": "langchain-agent",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "dev:nodemon": "nodemon --exec ts-node src/index.ts",
+    "test": "jest",
+    "watch": "tsc -w"
+  },
+  "dependencies": {
+    "@langchain/core": "^1.0.3",
+    "@langchain/google-genai": "^1.0.0",
+    "dotenv": "^17.2.3",
+    "langchain": "^1.0.3",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^4.17.25",
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.0.0",
+    "jest": "^29.5.0",
+    "nodemon": "^3.1.10",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.0.0"
+  }
+}
